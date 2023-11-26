@@ -19,10 +19,13 @@ jobs:
           dotnet-version: '6.0.x'
           include-prerelease: true
 
-      - name: Install Node.js and npm
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: '16'
+
+      - name: Install dotenv
+        run: npm install dotenv
 
       - name: Install dependencies
         run: npm install
