@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy ASP.Net Core app to Azure Web App - AzureWebDemoApp
 
 on:
@@ -18,17 +21,6 @@ jobs:
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '16'
-
-      - name: Install dotenv
-        run: npm install dotenv
-
-      - name: Install dependencies
-        run: npm install
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
@@ -54,7 +46,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: .net-app
-
+      
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -62,4 +54,4 @@ jobs:
           app-name: 'AzureWebDemoApp'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2858185A028E4D7BB6A6AD8E6F18E635 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_54823E0E337C458AA1F6C1611A85081B }}
