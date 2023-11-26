@@ -11,18 +11,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v7  # v7 は Node.js v16 以上をサポート
+        uses: actions/setup-dotnet@v7
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: "6.0.x"
           include-prerelease: true
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'  # Node.js バージョンを 16 に設定
+          node-version: "16"
 
       - name: Install dotenv
         run: npm install dotenv
@@ -37,7 +38,7 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
@@ -46,20 +47,24 @@ jobs:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: .net-app
-      
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2  # 最新のバージョンに更新
+        uses: azure/webapps-deploy@v2
         with:
-          app-name: 'AzureWebDemoApp'
-          slot-name: 'Production'
+          app-name: "AzureWebDemoApp"
+          slot-name: "Production"
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_54823E0E337C458AA1F6C1611A85081B }}
+        env:
+          DOTENV_LOADED: "true"  # Indicate that dotenv is already loaded
+
+      # Note: You might need additional steps to configure environment variables in Azure Web App
